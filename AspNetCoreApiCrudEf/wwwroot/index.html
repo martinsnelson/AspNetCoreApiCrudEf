@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Tarefas(To-do) CRUD</title>
+    <style>
+        html {
+            background-color: black;
+            color: white;
+        }
+
+        input, button {
+            background-color: black;
+            color: white;            
+        }
+
+        input:hover, button:hover {
+            background-color: blue;
+            color:white;
+        }
+
+        input[type='submit'], button, [aria-label] {
+            cursor: pointer;
+        }
+
+        #spoiler {
+            display: none;
+        }
+
+        table {
+            font-family: Arial, sans-serif;
+            border: 1px solid;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #0066CC;
+            color: white;
+        }
+
+        td {
+            border: 1px solid;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tarefas(To-do) CRUD</h1>
+    <h3>Add</h3>
+    <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+        <input type="text" id="add-name" placeholder="Nova terefa" autocomplete="off">
+        <input type="submit" value="Add" autocomplete="off">
+    </form>
+
+    <div id="spoiler">
+        <h3>Edit</h3>
+        <form class="my-form">
+            <input type="hidden" id="edit-id" autocomplete="off">
+            <input type="checkbox" id="edit-isComplete" autocomplete="off">
+            <input type="text" id="edit-name" autocomplete="off">
+            <input type="submit" value="Save" autocomplete="off">
+            <a onclick="closeInput()" aria-label="Close">&#10006;</a>
+        </form>
+    </div>
+
+    <p id="counter"></p>
+
+    <table>
+        <tr>
+            <th>Está completo</th>
+            <th>Nome</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <!--Binda da api-->
+        <tbody id="todos"></tbody>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="/js/site.js"></script>
+</body>
+</html>
