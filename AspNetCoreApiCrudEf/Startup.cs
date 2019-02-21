@@ -43,6 +43,9 @@ namespace AspNetCoreApiCrudEf
             app.UseDefaultFiles();
             /// Configure o aplicativo para fornecer arquivos estáticos
             app.UseStaticFiles();
+
+            app.UseSwagger();
+
             app.UseMvc();
         }
     }
