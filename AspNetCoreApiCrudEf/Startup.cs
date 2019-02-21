@@ -27,7 +27,7 @@ namespace AspNetCoreApiCrudEf
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "Tarefas Api", Version = "v1" });
             });
         }
 
@@ -51,7 +51,9 @@ namespace AspNetCoreApiCrudEf
             // especificando o terminal JSON do Swagger.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tarefas Api");
+                //  Para atender à interface do usuário do Swagger na raiz do aplicativo
+                //c.RoutePrefix = string.Empty;
             });
 
             app.UseMvc();

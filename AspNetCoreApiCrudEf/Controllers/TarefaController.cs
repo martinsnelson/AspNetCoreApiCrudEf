@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreApiCrudEf.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("v1/api/[controller]")]
     [ApiController]
     public class TarefaController : ControllerBase
     {
@@ -114,6 +114,17 @@ namespace AspNetCoreApiCrudEf.Controllers
 
             return NoContent();
         }
+
+        // PATCH: api/Tarefa/1
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> AlteracaoParcial(long id, TarefaItem item)
+        {
+            _context.Entry(item).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
 
         /// <Author>Nelson Martins</Author>
         /// <Date>21/02/19</Date>
