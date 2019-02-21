@@ -44,8 +44,11 @@ namespace AspNetCoreApiCrudEf
             /// Configure o aplicativo para fornecer arquivos estáticos
             app.UseStaticFiles();
 
+            // Ative o middleware para servir o Swagger gerado como um endpoint JSON.
             app.UseSwagger();
 
+            // Habilitar o middleware para servir swagger-ui (HTML, JS, CSS, etc.)
+            // especificando o terminal JSON do Swagger.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
