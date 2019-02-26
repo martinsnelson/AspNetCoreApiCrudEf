@@ -1,4 +1,4 @@
-﻿const uri = "api/tarefa";
+﻿const uri = "v1/api/tarefa";
 let todos = null;
 
 function getCount(data) {
@@ -30,29 +30,29 @@ function getData() {
 
             getCount(data.length);
 
-            $.each(data, function (key, item) {
+            $.each(data, function (key, tarefa) {
                 const tr = $("<tr></tr>")
                     .append(
                         $("<td></td>").append(
                             $("<input/>", {
                                 type: "checkbox",
                             disabled: true,
-                            checked: item.concluido
+                            checked: tarefa.concluido
                             })
                         )
                     )
-                    .append($("<td></td>").text(item.nome))
+                    .append($("<td></td>").text(tarefa.nome))
                     .append(
                         $("<td></td>").append(
                             $("<button>Edit</button>").on("click", function () {
-                                editItem(item.id);
+                                editItem(tarefa.id);
                             })
                         )
                     )
                     .append(
                         $("<td></td>").append(
                             $("<button>Delete</button>").on("click", function () {
-                                deleteItem(item.id);
+                            deleteItem(tarefa.id);
                             })
                         )
                     );
@@ -66,7 +66,7 @@ function getData() {
 }
 
 function addItem() {
-    const item = {
+    const tarefa = {
         nome: $("#add-name").val(),
         concluido: false
     };
@@ -76,7 +76,7 @@ function addItem() {
         accepts: "application/json",
         url: uri,
         contentType: "application/json",
-        data: JSON.stringify(item),
+        data: JSON.stringify(tarefa),
         error: function (jqXHR, textStatus, errorThrown) {
             alert("Algo deu errado!");
         },
@@ -98,18 +98,18 @@ function deleteItem(id) {
 }
 
 function editItem(id) {
-    $.each(todos, function (key, item) {
-        if (item.id === id) {
-            $("#edit-name").val(item.nome);
-            $("#edit-id").val(item.id);
-            $("#edit-isComplete")[0].checked = item.concluido;
+    $.each(todos, function (key, tarefa) {
+        if (tarefa.id === id) {
+            $("#edit-name").val(tarefa.nome);
+            $("#edit-id").val(tarefa.id);
+            $("#edit-isComplete")[0].checked = tarefa.concluido;
         }
     });
     $("#spoiler").css({ display: "block" });
 }
 
 $(".my-form").on("submit", function () {
-    const item = {
+    const tarefa = {
         nome: $("#edit-name").val(),
         concluido: $("#edit-isComplete").is(":checked"),
         id: $("#edit-id").val()
@@ -120,7 +120,7 @@ $(".my-form").on("submit", function () {
         type: "PUT",
         accepts: "application/json",
         contentType: "application/json",
-        data: JSON.stringify(item),
+        data: JSON.stringify(tarefa),
         success: function (result) {
             getData();
         }

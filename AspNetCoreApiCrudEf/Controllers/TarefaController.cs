@@ -1,11 +1,9 @@
-﻿using System;
+﻿using AspNetCoreApiCrudEf.Interface.DAL;
+using AspNetCoreApiCrudEf.Models.Tarefa;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AspNetCoreApiCrudEf.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreApiCrudEf.Controllers
 {
@@ -13,7 +11,9 @@ namespace AspNetCoreApiCrudEf.Controllers
     [ApiController]
     public class TarefaController : ControllerBase
     {
-        private readonly TarefaContext _context;
+        //private readonly TarefaContext _context; // remover
+
+        private readonly ITarefaDAL _iTarefaDAL;
 
         /// <Author>Nelson Martins</Author>
         /// <Date>21/02/19</Date>
@@ -23,14 +23,15 @@ namespace AspNetCoreApiCrudEf.Controllers
         /// o que significa que você não pode excluir todos as TarefasItems.
         /// </summary>
         /// <param name="context"></param>
-        public TarefaController(TarefaContext context)
+        public TarefaController(ITarefaDAL iTarefaDAL)
         {
-            _context = context;
+            _iTarefaDAL = iTarefaDAL;
 
-            if (_context.TarefaItems.Count() == 0)
+            if (_iTarefaDAL.ObterTarefas().Count()  == 0)
             {
-                _context.TarefaItems.Add(new TarefaItem { Nome = "Item1" });
-                _context.SaveChanges();
+                //_context.TarefaItems.Add(new Tarefa { Nome = "Item1" });
+                //_iTarefaDAL.Ins .Add(new Tarefa { Nome = "Item1" });
+                //_context.SaveChanges();
             }
         }
 
@@ -42,9 +43,10 @@ namespace AspNetCoreApiCrudEf.Controllers
         /// <returns></returns>
         // GET: api/Tarefa
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TarefaItem>>> ObterTarefaItems()
+        public IEnumerable<Tarefa> ObterTarefas()
         {
-            return await _context.TarefaItems.ToListAsync();
+            //return await _context.TarefaItems.ToListAsync();
+            return _iTarefaDAL.ObterTarefas();
         }
 
         /// <Author>Nelson Martins</Author>
@@ -56,16 +58,17 @@ namespace AspNetCoreApiCrudEf.Controllers
         /// <returns></returns>
         //  GET: api/Tarefa/1
         [HttpGet("{id}")]
-        public async Task<ActionResult<TarefaItem>> ObterTarefaItem(long id)
+        public async Task<ActionResult<Tarefa>> ObterTarefa(long id)
         {
-            var tarefaItem = await _context.TarefaItems.FindAsync(id);
+            var tarefa = await _iTarefaDAL.ObterTarefa(id);
 
-            if (tarefaItem == null)
+            if (tarefa == null)
             {
                 return NotFound();
             }
 
-            return tarefaItem;
+            return tarefa;
+            //return Ok(livro);
         }
 
         /// <Author>Nelson Martins</Author>
@@ -79,14 +82,14 @@ namespace AspNetCoreApiCrudEf.Controllers
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        //  POST: api/Tarefa
+        // POST: api/Tarefa
         [HttpPost]
-        public async Task<ActionResult<TarefaItem>> InserirTarefaItem(TarefaItem item)
+        public async Task<ActionResult<Tarefa>> InserirTarefa([FromBody] Tarefa tarefa)
         {
-            _context.TarefaItems.Add(item);
-            await _context.SaveChangesAsync();
+            //_iTarefaDAL.ObterTarefa.Add(tarefa);
+            await _iTarefaDAL.InserirTarefa(tarefa);
             
-            return CreatedAtAction(nameof(ObterTarefaItem), new { id = item.Id }, item);
+            return CreatedAtAction(nameof(ObterTarefa), new { id = tarefa.Id }, tarefa);
         }
 
         /// <Author>Nelson Martins</Author>
@@ -102,28 +105,32 @@ namespace AspNetCoreApiCrudEf.Controllers
         /// <returns></returns>
         //  PUT: api/Tarefa/1
         [HttpPut("{id}")]
-        public async Task<IActionResult> AlterarTarefaItem(long id, TarefaItem item)
+        public async Task<IActionResult> AlterarTarefa(long id, [FromBody] Tarefa tarefa)
         {
-            if (id != item.Id)
+            if (id != tarefa.Id)
             {
                 return BadRequest();
             }
+            try
+            {
+                await _iTarefaDAL.Put(tarefa);
+            }
+            catch (System.Exception e)
+            {
 
-            _context.Entry(item).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
+                throw;
+            }
             return NoContent();
         }
 
-        // PATCH: api/Tarefa/1
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> AlteracaoParcial(long id, TarefaItem item)
-        {
-            _context.Entry(item).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+        //// PATCH: api/Tarefa/1
+        //[HttpPatch("{id}")]
+        //public async Task<IActionResult> AlteracaoParcial(long id, Tarefa item)
+        //{
+        //    await _iTarefaDAL.AlterarTarefa(item);
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
 
         /// <Author>Nelson Martins</Author>
@@ -135,17 +142,16 @@ namespace AspNetCoreApiCrudEf.Controllers
         /// <returns></returns>
         // DELETE: api/Tarefa/1
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTarefaItem(long id)
+        public async Task<IActionResult> DeleteTarefa(long id)
         {
-            var tarefaItem = await _context.TarefaItems.FindAsync(id);
+            var tarefa = await _iTarefaDAL.ObterTarefa(id);
 
-            if (tarefaItem == null)
+            if (tarefa == null)
             {
                 return NotFound();
             }
 
-            _context.TarefaItems.Remove(tarefaItem);
-            await _context.SaveChangesAsync();
+            await _iTarefaDAL.DeletarTarefa(id);
 
             return NoContent();
         }

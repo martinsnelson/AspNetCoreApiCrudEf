@@ -11,4 +11,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AspNetCoreApiCrudEf.DAL\AspNetCoreApiCrudEf.DAL.csproj" />
+    <ProjectReference Include="..\AspNetCoreApiCrudEf.Interface\AspNetCoreApiCrudEf.Interface.csproj" />
+  </ItemGroup>
+
 </Project>

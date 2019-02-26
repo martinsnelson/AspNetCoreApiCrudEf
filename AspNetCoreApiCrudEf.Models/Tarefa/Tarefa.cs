@@ -1,14 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
-namespace AspNetCoreApiCrudEf.Models
+namespace AspNetCoreApiCrudEf.Models.Tarefa
 {
-    //Um modelo é um conjunto de classes que representam os dados gerenciados pelo aplicativo.
-    //TodoItem -> TodoItem
-    public class TarefaItem
+    [DataContract]
+    public class Tarefa
     {
+        [Key]
+        [DataMember]
         public long Id { get; set; }
         [Required]
+        [DataMember]
         public string Nome { get; set; }
+        [DataMember]
         public bool Concluido { get; set; }
     }
 }

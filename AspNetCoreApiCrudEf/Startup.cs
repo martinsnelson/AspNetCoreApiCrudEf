@@ -1,4 +1,6 @@
-﻿using AspNetCoreApiCrudEf.Models;
+﻿using AspNetCoreApiCrudEf.DAL;
+using AspNetCoreApiCrudEf.DAL.Contexts;
+using AspNetCoreApiCrudEf.Interface.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +22,9 @@ namespace AspNetCoreApiCrudEf
 
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddScoped<ITarefaDAL, TarefaDAL>();
+            services.AddTransient<ITarefaDAL, TarefaDAL>();
+
             services.AddDbContext<TarefaContext>(options =>
             options.UseInMemoryDatabase("ListaTarefas"));
 
